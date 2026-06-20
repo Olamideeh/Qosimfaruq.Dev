@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qosim Faruq Olamide — Backend Java Developer</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0B1120;
+    --surface: #111827;
+    --card: #1a2238;
+    --border: #1e3a5f;
+    --blue: #3B82F6;
+    --blue-dim: #1d4ed8;
+    --blue-glow: rgba(59,130,246,0.15);
+    --cyan: #22D3EE;
+    --text: #E2E8F0;
+    --muted: #94A3B8;
+    --faint: #334155;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Inter', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 40px;
+    background: rgba(11,17,32,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--blue);
+    letter-spacing: 0.05em;
+  }
+  .nav-logo span { color: var(--cyan); }
+
+  nav ul { list-style: none; display: flex; gap: 32px; }
+  nav a {
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  nav a:hover { color: var(--blue); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 100px 40px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(59,130,246,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59,130,246,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .hero-inner { position: relative; text-align: center; max-width: 760px; }
+
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--cyan);
+    border: 1px solid rgba(34,211,238,0.3);
+    border-radius: 20px;
+    padding: 6px 16px;
+    margin-bottom: 28px;
+    background: rgba(34,211,238,0.05);
+  }
+  .hero-tag::before { content: ''; width: 7px; height: 7px; background: var(--cyan); border-radius: 50%; animation: pulse 2s infinite; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  h1 {
+    font-size: clamp(38px, 6vw, 64px);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+  h1 .name-line { color: var(--text); }
+  h1 .role-line {
+    background: linear-gradient(90deg, var(--blue), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 540px;
+    margin: 20px auto 40px;
+    line-height: 1.7;
+  }
+
+  .hero-cta {
+    display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--blue);
+    color: #fff;
+    text-decoration: none;
+    padding: 13px 28px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 15px;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .btn-primary:hover { background: var(--blue-dim); transform: translateY(-1px); }
+
+  .btn-ghost {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 1px solid var(--border);
+    color: var(--text);
+    text-decoration: none;
+    padding: 13px 28px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 15px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--blue); color: var(--blue); }
+
+  /* ── SECTIONS ── */
+  section { padding: 80px 40px; max-width: 900px; margin: 0 auto; }
+
+  .section-label {
+    display: flex; align-items: center; gap: 12px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--blue);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+  }
+  .section-label::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
+
+  h2 { font-size: 28px; font-weight: 700; color: var(--text); margin-bottom: 40px; }
+
+  /* ── SKILLS ── */
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+
+  .skill-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .skill-card:hover { border-color: var(--blue); transform: translateY(-3px); }
+
+  .skill-card-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--cyan);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+  }
+
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag {
+    background: var(--blue-glow);
+    color: var(--blue);
+    border: 1px solid rgba(59,130,246,0.2);
+    border-radius: 5px;
+    padding: 3px 10px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  /* ── EXPERIENCE ── */
+  .timeline { position: relative; padding-left: 24px; }
+  .timeline::before {
+    content: '';
+    position: absolute; left: 0; top: 8px; bottom: 8px;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--blue), var(--border));
+  }
+
+  .timeline-item { position: relative; margin-bottom: 40px; }
+  .timeline-item::before {
+    content: '';
+    position: absolute; left: -28px; top: 8px;
+    width: 9px; height: 9px;
+    background: var(--blue);
+    border: 2px solid var(--bg);
+    border-radius: 50%;
+  }
+
+  .exp-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
+  .exp-title { font-size: 18px; font-weight: 600; color: var(--text); }
+  .exp-company { font-size: 14px; color: var(--blue); font-weight: 500; margin-bottom: 8px; }
+  .exp-badge {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px solid var(--faint);
+    border-radius: 4px;
+    padding: 3px 9px;
+  }
+
+  .exp-list { list-style: none; }
+  .exp-list li {
+    font-size: 14px;
+    color: var(--muted);
+    padding: 4px 0 4px 16px;
+    position: relative;
+  }
+  .exp-list li::before { content: '▸'; position: absolute; left: 0; color: var(--blue); }
+
+  /* ── PROJECTS ── */
+  .project-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .project-card:hover { border-color: var(--blue); transform: translateY(-3px); }
+
+  .project-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--blue), var(--cyan));
+  }
+
+  .project-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
+  .project-name { font-size: 20px; font-weight: 700; color: var(--text); }
+  .project-link {
+    display: flex; align-items: center; gap: 6px;
+    text-decoration: none;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--blue);
+    border: 1px solid rgba(59,130,246,0.3);
+    border-radius: 5px;
+    padding: 5px 12px;
+    transition: background 0.2s;
+  }
+  .project-link:hover { background: var(--blue-glow); }
+
+  .project-desc { font-size: 14px; color: var(--muted); margin-bottom: 16px; line-height: 1.6; }
+  .project-features { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+  .project-features li { font-size: 13px; color: var(--muted); padding-left: 14px; position: relative; }
+  .project-features li::before { content: '▸'; position: absolute; left: 0; color: var(--cyan); font-size: 11px; top: 1px; }
+
+  .stack-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+  .stack-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--cyan);
+    background: rgba(34,211,238,0.07);
+    border: 1px solid rgba(34,211,238,0.2);
+    border-radius: 4px;
+    padding: 3px 10px;
+  }
+
+  /* ── CONTACT ── */
+  #contact { text-align: center; }
+  #contact h2 { margin-bottom: 12px; }
+  .contact-sub { font-size: 15px; color: var(--muted); margin-bottom: 40px; }
+
+  .contact-grid { display: flex; justify-content: center; flex-wrap: wrap; gap: 16px; }
+  .contact-card {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 24px;
+    text-decoration: none;
+    color: var(--text);
+    font-size: 14px;
+    transition: border-color 0.2s, color 0.2s;
+    min-width: 200px;
+  }
+  .contact-card:hover { border-color: var(--blue); color: var(--blue); }
+  .contact-icon { font-size: 20px; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 32px;
+    border-top: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--faint);
+  }
+  footer span { color: var(--blue); }
+
+  @media (max-width: 600px) {
+    nav { padding: 14px 20px; }
+    nav ul { gap: 18px; }
+    section { padding: 60px 20px; }
+    .project-features { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">&lt;<span>QF</span> /&gt;</div>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero" style="max-width:100%;padding:0;">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div class="hero-tag">Available for opportunities</div>
+    <h1>
+      <div class="name-line">Qosim Faruq Olamide</div>
+      <div class="role-line">Backend Java Developer</div>
+    </h1>
+    <p class="hero-sub">
+      I build reliable backend systems with Java & Spring Boot, and create interactive frontends with React and TypeScript. Based in Lagos Island, ready to bring ideas to production.
+    </p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn-primary">View My Work →</a>
+      <a href="#contact" class="btn-ghost">Get In Touch</a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">// who I am</div>
+  <h2>About Me</h2>
+  <p style="font-size:16px; color: var(--muted); line-height: 1.8; max-width: 680px;">
+    I'm a passionate software developer focused on backend engineering with Java. I've built projects using Java fundamentals, GitHub workflows, and modern tooling like Docker and Node.js. My goal is to join a team where I can grow as a backend engineer, contribute to meaningful products, and continue sharpening my craft in Spring Boot and distributed systems.
+  </p>
+  <div style="display:flex; gap: 32px; margin-top: 32px; flex-wrap: wrap;">
+    <div>
+      <div style="font-family:var(--mono); font-size: 11px; color: var(--cyan); margin-bottom: 4px;">LOCATION</div>
+      <div style="font-size: 15px; font-weight: 600;">Lagos Island, Nigeria</div>
+    </div>
+    <div>
+      <div style="font-family:var(--mono); font-size: 11px; color: var(--cyan); margin-bottom: 4px;">TARGET ROLE</div>
+      <div style="font-size: 15px; font-weight: 600;">Backend Java Developer</div>
+    </div>
+    <div>
+      <div style="font-family:var(--mono); font-size: 11px; color: var(--cyan); margin-bottom: 4px;">OPEN TO</div>
+      <div style="font-size: 15px; font-weight: 600;">Full-time · Internships · Remote</div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-label">// what I work with</div>
+  <h2>Technical Skills</h2>
+  <div class="skills-grid">
+    <div class="skill-card">
+      <div class="skill-card-label">Languages</div>
+      <div class="skill-tags">
+        <span class="tag">Java</span>
+        <span class="tag">TypeScript</span>
+        <span class="tag">JavaScript</span>
+        <span class="tag">HTML</span>
+        <span class="tag">CSS</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-label">Frameworks</div>
+      <div class="skill-tags">
+        <span class="tag">Spring Boot</span>
+        <span class="tag">React</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-label">Tools & DevOps</div>
+      <div class="skill-tags">
+        <span class="tag">Git</span>
+        <span class="tag">Docker</span>
+        <span class="tag">Bash</span>
+        <span class="tag">Node.js</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-label">Concepts</div>
+      <div class="skill-tags">
+        <span class="tag">OOP</span>
+        <span class="tag">REST APIs</span>
+        <span class="tag">GitHub Workflow</span>
+        <span class="tag">CLI Design</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-label">// where I've worked</div>
+  <h2>Experience</h2>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="exp-header">
+        <div>
+          <div class="exp-title">Software Engineering Intern</div>
+          <div class="exp-company">Tech Company · Lagos Island</div>
+        </div>
+        <span class="exp-badge">Internship</span>
+      </div>
+      <ul class="exp-list">
+        <li>Gained hands-on experience in a professional software development environment</li>
+        <li>Collaborated with engineers on backend development tasks and feature delivery</li>
+        <li>Applied Java programming skills within a structured, team-based workflow</li>
+      </ul>
+    </div>
+    <div class="timeline-item">
+      <div class="exp-header">
+        <div>
+          <div class="exp-title">Technical Volunteer</div>
+          <div class="exp-company">Student Organization · Lagos</div>
+        </div>
+        <span class="exp-badge">Volunteer</span>
+      </div>
+      <ul class="exp-list">
+        <li>Supported fellow students with programming guidance and technical troubleshooting</li>
+        <li>Helped organize tech workshops and coding events on campus</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-label">// what I've built</div>
+  <h2>Projects</h2>
+
+  <div class="project-card">
+    <div class="project-header">
+      <div class="project-name">Student Utility App</div>
+      <a href="https://github.com/Olamideeh/student-utility-app" target="_blank" class="project-link">
+        ↗ GitHub
+      </a>
+    </div>
+    <p class="project-desc">
+      A command-line Java application demonstrating core programming fundamentals. Built with clean Java and maintained through a structured GitHub workflow, it provides a set of practical utility functions for students.
+    </p>
+    <ul class="project-features">
+      <li>Add two integers — accepts input, displays the sum</li>
+      <li>Even/Odd checker — classifies numbers with a ternary operator</li>
+      <li>Number sequence printer — iterates from 1 to N using loops</li>
+      <li>Day-of-week resolver — maps 1–7 to day names via switch statement</li>
+    </ul>
+    <div class="stack-tags">
+      <span class="stack-tag">Java</span>
+      <span class="stack-tag">GitHub</span>
+      <span class="stack-tag">OOP</span>
+      <span class="stack-tag">CLI</span>
+    </div>
+  </div>
+
+  <div class="project-card">
+    <div class="project-header">
+      <div class="project-name">SaalsProduct</div>
+      <a href="https://github.com/Olamideeh/Saalsproduct-" target="_blank" class="project-link">
+        ↗ GitHub
+      </a>
+    </div>
+    <p class="project-desc">
+      A versatile digital platform offering URL shortening, secure money transfers, and instant airtime purchases — all from a single interface. Contributed as both a core team member and technical instructor, guiding the team through backend architecture decisions.
+    </p>
+    <ul class="project-features">
+      <li>URL shortening — generate and manage compact shareable links</li>
+      <li>Secure money transfer — send funds reliably between users</li>
+      <li>Instant airtime purchase — mobile recharge in one click</li>
+      <li>PostgreSQL-backed persistence with Dockerized deployment</li>
+    </ul>
+    <div class="stack-tags">
+      <span class="stack-tag">Java</span>
+      <span class="stack-tag">Spring Boot</span>
+      <span class="stack-tag">PostgreSQL</span>
+      <span class="stack-tag">Docker</span>
+      <span class="stack-tag">Team Project</span>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label" style="justify-content:center;">// get in touch</div>
+  <h2>Let's Work Together</h2>
+  <p class="contact-sub">
+    Open to backend Java roles, IT support positions, and collaborative projects. Drop me a message.
+  </p>
+  <div class="contact-grid">
+    <a href="tel:08166201043" class="contact-card">
+      <span class="contact-icon">📞</span>
+      <div>
+        <div style="font-size:12px; color: var(--muted); margin-bottom: 2px;">Phone</div>
+        <div style="font-weight: 600;">08166201043</div>
+      </div>
+    </a>
+    <a href="mailto:ademolaqosim@gmail.com" class="contact-card">
+      <span class="contact-icon">✉️</span>
+      <div>
+        <div style="font-size:12px; color: var(--muted); margin-bottom: 2px;">Email</div>
+        <div style="font-weight: 600;">ademolaqosim@gmail.com</div>
+      </div>
+    </a>
+    <a href="https://github.com/Olamideeh" target="_blank" class="contact-card">
+      <span class="contact-icon">💻</span>
+      <div>
+        <div style="font-size:12px; color: var(--muted); margin-bottom: 2px;">GitHub</div>
+        <div style="font-weight: 600;">github.com/Olamideeh</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<footer>
+  Built by <span>Qosim Faruq Olamide</span> · Lagos Island, Nigeria
+</footer>
+
+</body>
+</html>
